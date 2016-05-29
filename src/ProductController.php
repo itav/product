@@ -21,8 +21,6 @@ class ProductController
     public function addAction(Application $app, $id = null)
     {
         $product = new Product();
-        $tax = new Tax();
-        $product->setTax($tax);
         if ($id) {
             $repo = new ProductRepo();
             $product = $repo->find($id);
@@ -165,7 +163,6 @@ class ProductController
         $select
                 ->setLabel('Select Tax:')
                 ->setName('tax[id]');
-        $i = 0;
         $options = [];
         foreach($taxes as $tax){
             $option = new Form\Option();
