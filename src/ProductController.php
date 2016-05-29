@@ -120,7 +120,8 @@ class ProductController
         $description = new Form\TextArea();
         $description
                 ->setLabel('Description:')
-                ->setName('product[description]');                
+                ->setName('product[description]')
+                ->setValue($product->getDescription());
         
         $submit = new Form\Button();
         $submit
