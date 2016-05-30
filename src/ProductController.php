@@ -14,9 +14,33 @@ class ProductController
     {
         $repo = new ProductRepo();
         $products = $repo->findAll();
-        var_dump($products);
-        return '';
+        $serializer = new Serializer();
+        $vars = [];
+        foreach ($products as $product){
+            $vars[] = $serializer->normalize($product);
+        }
+        return json_encode($vars);
     }
+    
+    public function listTaxAction()
+    {
+        $repo = new TaxRepo();
+        $taxes = $repo->findAll();
+        $serializer = new Serializer();
+        $vars = [];
+        foreach ($taxes as $tax){
+            $vars[] = $serializer->normalize($tax);
+        }
+        return json_encode($vars);
+    }    
+    
+    public function formAction()
+    {
+        $serializer = new Serializer();
+        $product = new Product();
+        $select = $this->prepareSelectProduct($product);
+        return json_encode($serializer->normalize($select));
+    } 
 
     public function addAction(Application $app, $id = null)
     {
@@ -170,6 +194,32 @@ class ProductController
                     ->setLabel($tax->getName())
                     ->setValue($tax->getId())
                     ->setSelected($tax->getId() === $product->getTax()->getId());
+            $options[] = $option;
+        }
+        $select->setOptions($options);
+        return $select;
+    }
+    
+        /**
+     * 
+     * @param Product $product
+     * @return Form\Select
+     */
+    public function prepareSelectProduct($product)
+    {
+        $repo = new ProductRepo();
+        $products = $repo->findAll();
+        $select = new Form\Select();
+        $select
+                ->setLabel('Select Product:')
+                ->setName('product[id]');
+        $options = [];
+        foreach ($products as $item) {
+            $option = new Form\Option();
+            $option
+                    ->setLabel($item->getName() ? $item->getName() :  $item->getFirstName() . $item->getLastName())
+                    ->setValue($item->getId())
+                    ->setSelected($item->getId() === $product->getId());
             $options[] = $option;
         }
         $select->setOptions($options);

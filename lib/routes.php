@@ -3,6 +3,8 @@
 //$app = new Silex\Application();
 
 $app->get('/list', 'App\\ProductController::listAction');
+$app->get('/list/tax', 'App\\ProductController::listTaxAction');
+$app->get('/form', 'App\\ProductController::formAction');
 $app->get('/add', 'App\\ProductController::addAction');
 $app->post('/add', 'App\\ProductController::saveAction')->bind('product_add');
 $app->get('/info/{id}', 'App\\ProductController::infoAction')->assert('id', '\w+');
