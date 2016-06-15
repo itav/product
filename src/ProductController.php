@@ -225,5 +225,18 @@ class ProductController
         $select->setOptions($options);
         return $select;
     }
+    
+    public function taxInfoAction(Application $app, Request $request, $id)
+    {
+        $serializer = new Serializer();
+        $repo = new TaxRepo();
+        $tax = $repo->find($id);
+        if($request->headers->get('Accept') == 'application/json') {
+            return $app->json($serializer->normalize($tax));
+        }
+        $out = print_r($tax, true);
 
+        return $out;
+    }
+    
 }
